@@ -1,13 +1,11 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.StringTokenizer;
@@ -32,6 +30,7 @@ public class InstrcutionHandler extends Task<Integer> {
     @Override
     protected Integer call() throws Exception {
         Register.pc = 0;
+        Statistics.dynamicInstructionCount = 0;
         new Memory(0, 20);
         Register.pc = 0;
         while (Register.pc < vector.size()) {
@@ -45,7 +44,19 @@ public class InstrcutionHandler extends Task<Integer> {
     }
 
     private void updateStat(){
-        controller.lblDynamicInstruction.setText("" + Statistics.dynamicInstructionCount);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    System.out.println(Statistics.dynamicInstructionCount);
+                    controller.lblDynamicInstruction.setText("" + Statistics.dynamicInstructionCount);
+                    System.out.println(Statistics.dynamicInstructionCount);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void updateMemory(){

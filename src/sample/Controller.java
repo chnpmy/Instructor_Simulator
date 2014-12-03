@@ -26,7 +26,7 @@ public class Controller {
     @FXML protected void handleRun(ActionEvent event){
         String s = txtArea.getText();
         try {
-            new InstrcutionHandler(s, this).call();
+            new Thread(new InstrcutionHandler(s, this)).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
